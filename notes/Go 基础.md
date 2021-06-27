@@ -199,22 +199,24 @@ func main()  {
 
 #### 5.1.1 输出的格式
 
-| 动 词 | 功 能                                    |
-| ----- | ---------------------------------------- |
-| %v    | 按值的本来值输出                         |
-| %+v   | 在 %v 基础上，对结构体字段名和值进行展开 |
-| %#v   | 输出 Go 语言语法格式的值                 |
-| %T    | 输出 Go 语言语法格式的类型和值           |
-| %%    | 输出 % 本体                              |
-| %b    | 整型以二进制方式显示                     |
-| %o    | 整型以八进制方式显示                     |
-| %d    | 整型以十进制方式显示                     |
-| %x    | 整型以十六进制方式显示                   |
-| %X    | 整型以十六进制、字母大写方式显示         |
-| %U    | Unicode 字符                             |
-| %f    | 浮点数                                   |
-| %p    | 指针，十六进制方式显示                   |
-| %t    | bool类型占位符                           |
+| 动 词 | 功 能                                      |
+| ----- | ------------------------------------------ |
+| %v    | 按值的本来值输出                           |
+| %+v   | 在 %v 基础上，对结构体字段名和值进行展开   |
+| %#v   | 输出 Go 语言语法格式的值                   |
+| %T    | 输出 Go 语言语法格式的类型和值             |
+| %%    | 输出 % 本体                                |
+| %b    | 整型以二进制方式显示                       |
+| %o    | 整型以八进制方式显示                       |
+| %d    | 整型以十进制方式显示                       |
+| %x    | 整型以十六进制方式显示                     |
+| %X    | 整型以十六进制、字母大写方式显示           |
+| %U    | Unicode 字符                               |
+| %c    | 输出单个字符                               |
+| %q    | 单引号围绕的字符字面值，由Go语法安全地转义 |
+| %f    | 浮点数                                     |
+| %p    | 指针，十六进制方式显示                     |
+| %t    | bool类型占位符                             |
 
 ## 6 数据类型
 
@@ -314,13 +316,174 @@ false
 	fmt.Println(isBoy != isGirl)
 ```
 
-6.2 数值类型
+### 6.2 数值类型
 
-6.2.1 整型
+#### 6.2.1 整型
 
 ![image-20210627181747832](Go 基础.assets/image-20210627181747832.png)
 
 ![Go语言学习笔记_2021_06_27_180905](Go 基础.assets/Go语言学习笔记_2021_06_27_180905.png)
+
+##### 6.2.1.1 定义整型变量
+
+```go
+	var age int = 20
+	fmt.Printf("%T %d\n", age, age)
+	fmt.Println(0777) //八进制
+	fmt.Println(0x10) //十六进制
+----
+运行结果：
+int 20
+511
+16
+```
+
+##### 6.2.1.2 算数运算
+
++ 运算符：：+、-、*、/、%、++、--
++ ++ 和 -- 所操作的对象必须是变量，且必须在变量后面
+
+```go
+	var age int = 20
+
+	fmt.Println(1 + 2)
+	fmt.Println(2 - 1)
+	fmt.Println(1 * 3)
+	fmt.Println(9 / 2)
+	fmt.Println(9 % 2)
+
+	age ++ //自增
+	fmt.Println(age)
+	age -- //自减
+	fmt.Println(age)
+
+---
+运行结果：
+3
+1
+3
+4
+1
+21
+20
+```
+
+##### 6.2.1.3 关系运算
+
++ 运算符：  >、>=、<、<=、==、!=
+
+```go
+	fmt.Println(2 > 4)
+	fmt.Println(1 < 3)
+	fmt.Println(2 >= 2)
+	fmt.Println(2 <= 3)
+	fmt.Println(2 == 2)
+	fmt.Println(1 != 3)
+
+---
+运行结果：
+false
+true
+true
+true
+true
+true
+```
+
+##### 6.2.1.4 位运算
+
++ 运算符：&、|、^、<<、>>、&^
+
+##### 6.2.1.5 赋值运算
+
++ 赋值运算符：=、+=、-=、*=、/=、%=、&=、|=、^=、<<=、>>=
+
+```go
+	age = 10
+	age += 3 // age  = age + 3
+	fmt.Println(age)
+	age -= 3 // age = age - 3
+	fmt.Println(age)
+	age *= 2 // age = age * 2
+	fmt.Println(age)
+	age %= 2 // age = age % 2
+	fmt.Println(age)
+	age /= 3 // age = age / 3
+	fmt.Println(age)
+
+---运行结果：
+13
+10
+20
+0
+0   
+```
+
+6.2.1.6 类型转换
+
++ 不同类型间不能直接运算，需要进行类型转换
++ 从大往小转时，可能会导致溢出
+
+```
+	fmt.Println(intA + int(uintB)) //强制类型转换，将uint类型转换成int类型
+	fmt.Println(uint(intA) + uintB) //强制类型转换，将int类型转换成uint类型
+```
+
+##### 6.2.1.7  rune 和 byte
+
+###### 6.2.1.7.1 定义
+
+```go
+	//byte, rune
+	var a byte = 'A'
+	var b rune = '中'
+	fmt.Println(a, b)
+
+---
+运行结果：
+65 20013
+```
+
+###### 6.2.1.7.2 [] rune 和 [] byte 区别
+
+**go源码中的定义：**
+
+```go
+// byte is an alias for uint8 and is equivalent to uint8 in all ways. It is
+// used, by convention, to distinguish byte values from 8-bit unsigned
+// integer values.
+type byte = uint8
+
+// rune is an alias for int32 and is equivalent to int32 in all ways. It is
+// used, by convention, to distinguish character values from integer values.
+type rune = int32
+```
+
+#### 6.2.2 浮点数
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
