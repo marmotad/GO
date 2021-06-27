@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>任务列表</title>
+    <link rel="stylesheet" type="text/css" href="/css/search.css" />
+    <link rel="stylesheet" type="text/css" href="/css/mystyle.css" />
+</head>
+<body>
+    <p>任务名称:</p>
+    <form method="GET" action="/list/">
+        <div id="search">
+           <input type="text" name="name" placeholder="Search..." required autocomplete="on" autofocus>
+        </div>
+        <!-- <input type="submit" value="提交"> <br> -->
+    </form>
+
+    <hr />
+    <br>
+    {{ if .Ok }}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>名称</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>状态</th>
+                <th>负责人</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range .Task }}
+            <tr>
+                <td>{{ .ID }}</td>
+                <td>{{ .Name }}</td>
+                <td>{{ .StartTime }}</td>
+                <td>{{ .EndTime }}</td>
+                <td>{{ .Status }}</td>
+                <td>{{ .User }}</td>
+            </tr>
+            {{ end }}
+        </tbody>
+    </table>
+    {{ end }}
+</body>
+</html>

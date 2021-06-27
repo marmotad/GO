@@ -214,24 +214,113 @@ func main()  {
 | %U    | Unicode 字符                             |
 | %f    | 浮点数                                   |
 | %p    | 指针，十六进制方式显示                   |
+| %t    | bool类型占位符                           |
 
+## 6 数据类型
 
+### 6.1 bool类型
 
++ bool值用于表示真假
++ 标识符：bool
++ 可选择：true/false
 
+#### 6.1.1 定义bool类型
 
+```go
+	var zero bool
+	//查看bool类型的零值
+	isBoy := true
+	isGirl := false
+	fmt.Println(zero, isBoy, isGirl)
+```
 
+#### 6.1.2 bool的操作
 
+##### 6.1.2.1 逻辑运算
 
++ 与 &&， 或 || ，非 ！
 
+##### 6.1.2.2 真值表
 
+```go
+	fmt.Println("&& 与运算")
+	fmt.Println(true && true)
+	fmt.Println(true && false)
+	fmt.Println(false && true)
+	fmt.Println(false && false)
 
+------
+运行结果：
+&& 与运算
+true
+false
+false
+false
+```
 
+**（&& 与）真值表**
 
+| X     | y     | 返回  |
+| ----- | ----- | ----- |
+| TRUE  | TRUE  | TRUE  |
+| TRUE  | FALSE | FALSE |
+| FALSE | TRUE  | FALSE |
+| FALSE | FALSE | FALSE |
 
+```go
+	fmt.Println("|| 或运算")
+	fmt.Println(true || true)
+	fmt.Println(true || false)
+	fmt.Println(false || true)
+	fmt.Println(false || false)
 
+---
+运行结果
+|| 或运算
+true
+true
+true
+false
+```
 
+**（|| 或）真值表**
 
+| X     | Y     | 返回  |
+| ----- | ----- | ----- |
+| TRUE  | TRUE  | TRUE  |
+| TRUE  | FALSE | TRUE  |
+| FALSE | TRUE  | TRUE  |
+| FALSE | FALSE | FALSE |
 
+```go
+	fmt.Println("! 取反")
+	fmt.Println(!true)
+	fmt.Println(!false)
+```
+
+**（!非）真值表**
+
+| 非   | X     | 返回  |
+| ---- | ----- | ----- |
+| !    | TRUE  | FALSE |
+| !    | FALSE | TRUE  |
+
+#### 6.1.2.2 关系运算(==、!=)
+
+```go
+	isBoy := true
+	isGirl := false
+	fmt.Println(isBoy == isGirl)
+	fmt.Println(isBoy != isGirl)
+```
+
+6.2 数值类型
+
+6.2.1 整型
+
+![image-20210627181747832](Go 基础.assets/image-20210627181747832.png)
+
+![Go语言学习笔记_2021_06_27_180905](Go 基础.assets/Go语言学习笔记_2021_06_27_180905.png)
 
 
 
