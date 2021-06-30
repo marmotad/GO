@@ -419,7 +419,7 @@ true
 0   
 ```
 
-6.2.1.6 类型转换
+##### 6.2.1.6 类型转换
 
 + 不同类型间不能直接运算，需要进行类型转换
 + 从大往小转时，可能会导致溢出
@@ -461,25 +461,495 @@ type rune = int32
 
 #### 6.2.2 浮点数
 
++ Go提供float32和float64两种浮点类型
 
++ float类型零值是0.0
 
+##### 6.2.2.1 定义浮点型
 
+```go
+	var height float32 //= 1.68
+	fmt.Println(height)
+	fmt.Printf("%T %f\n",height, height)
+```
 
+##### 6.2.2.2 浮点数字面量
 
++ 十进制表示法：3.1415926
++ 科学记数法：1e-5(表示：1乘10的-5次方)，1.05E1（表示1.05乘10的1次方）
 
+```go
+	a1 := 1.05E1
+	fmt.Println(a1)
 
+---
+运行结果：
+10.5
+```
 
+##### 6.2.2.3 浮点型算数运算
 
++ 算数运算符：：+、-、*、/、++、--
+  + 注意：针对/除数不能为0
 
++ 浮点数在存褚时，有一定精度损耗，使用运算时也会有精度损耗
 
+```go
+	//浮点数算数运算
+	fmt.Println(1.1 + 1.2)
+	fmt.Println(1.1 - 1.2)
+	fmt.Println(1.1 * 1.2)
+	fmt.Println(1.1 / 1.2)
+	f1 := 1.1
+	f1 ++
+	fmt.Println(f1)
+	f1 --
+	fmt.Println(f1)
 
+---
+运行结果：
+-0.1
+1.32
+0.9166666666666666
+2.1
+1.1
+```
 
+##### 6.2.2.3 关系运算
 
++ ：>、>=、<、<=
+  + 浮点型不能进行==或!=比较，可选择使用两个浮点数的差在一定区间内则认为相等
 
+```go
+	//关系运算
+	fmt.Println(1.1 > 1.2)
+	fmt.Println(1.1 < 1.2)
+	fmt.Println(1.1 <= 1.2)
+	fmt.Println(1.1 >= 1.2)
+---
+运行结果：
+false
+true
+true
+false
+```
 
+##### 6.2.2.4 赋值运算符
 
++ 运算符：=、+=、-=、*=、/=
 
+```go
+	//赋值运算
+	a1 += 0.2 //其他运算符和+=类似
+	fmt.Println(a1)
+```
 
+##### 6.2.2.5 类型转换
+
+```go
+	fmt.Printf("%T %T", a1, float32(a1))
+
+---
+运行结果：
+float64 float32
+```
+
+##### 6.2.2.6 浮点类型格式化输出
+
++ 使用fmt.Printf进行格式化参数输出，占位符:
+  +  %f、%F：十进制表示法
+    +  %n.mf表示最小占n个宽度并且保留m位小数
+  + l %e、%E：科学记数法表示
+  + l %g、%G：自动选择最紧凑的表示方法%e(%E)或%f(%F)
+
+```go
+	fmt.Println(a1)
+	fmt.Printf("%11.3f", a1)
+
+---
+运行结果：
+10.7
+     10.700
+```
+
+### 6.3 字符串类型
+
+#### 6.3.1 定义字符串
+
++ 可解析字符串：通过双引号(")来创建，不能包含多行，支持特殊字符转义序列
++  原生字符串：通过反引号(`)来创建，可包含多行，不支持特殊字符转义序列
+
+```go
+	//"" ==> 可解释字符串
+	//`` ==> 原生字符串
+	var name = "ha\tha"
+	var desc = `xi\txi`
+	fmt.Println(name)
+	fmt.Println(desc)
+
+---
+运行结果：
+ha	ha
+xi\txi
+```
+
+#### 6.3.2 字符串操作
+
+##### 6.3.2.1 算数运算符（+：连接字符串）
+
+```go
+	fmt.Println("a" + "b")
+```
+
+##### 6.3.2.2 字符串关系运算
+
+```
+	fmt.Println("ab" == "bb")
+	fmt.Println("ab" != "bb")
+	fmt.Println("ab" >= "bb")
+	fmt.Println("ab" <= "bb")
+	fmt.Println("ab" > "bb")
+	fmt.Println("ab" < "bb")
+	
+---
+运行结果：
+false
+true
+false
+true
+false
+true
+```
+
+##### 6.3.2.3 赋值运算
+
++ 赋值运算符：+=
+
+```go
+	//赋值运算
+	str := "ha"
+	str += "ha"
+	fmt.Println(str)
+	
+---
+运行结果：
+haha
+```
+
+##### 6.3.2.3 索引（针对只包含ascii字符的字符串） 
+
+```go
+	str1 := "xixixi"
+	fmt.Printf("%T %c\n", str1[0], str1[0])
+
+---
+运行结果：
+uint8 x
+```
+
+##### 6.3.2.4 切片（针 对只包含ascii字符的字符串） 
+
+```go
+	//切片
+	fmt.Printf("%T %v\n", str1[0:2], str1[0:2])
+	//查看字符串长度
+	fmt.Println(len(str1))
+
+---
+运行结果：
+string xi
+6
+```
+
+### 6.4 指针
+
+```go
+	// 指针
+	var cc *int //定义指针类型变量
+	fmt.Println(cc) //打印指针类型默认值,指针类型默认值是nil
+	cc = &A //获取变量地址使用&
+	C := &A
+	fmt.Printf("%T %T\n", C, cc)
+	fmt.Println(*cc) //打印内存地址中的值使用*
+	*cc = 4 //修改内存地址中的值
+	fmt.Println(A) //修改内存地址中的值，指向相同内存地址的变量的值也会被修改
+
+---
+运行结果：  
+<nil>
+*int *int
+1
+4
+```
+
+### 6.5 scan
+
+```go
+	var name string
+	fmt.Print("请输入姓名：")
+	fmt.Scan(&name)
+	fmt.Println("你的姓名的：", name)
+```
+
+## 7 流程控制
+
+### 7.1 条件语句if
+
++ 当if 表达式结果为 true ，则执行 if 语句块内代码，否则依次从上到下判断 else if 表达式结果，若结果为 true 则执行对应语句块内代码并退出 if else if else 语句，若 i f 和else if 表达式均为 false ，则执行 else 语句块内代码
+
+#### 7.1.1 if
+
++ 当if 表达式的结果为 t rue 则执行语句块 内代码
+
+```go
+	fmt.Print("有没有买西瓜的（Y/N）：")
+	var yes string
+	fmt.Scan(&yes)
+
+	fmt.Println("老婆的想法：")
+	fmt.Println("买十个包子")
+	if yes == "Y" || yes == "y" {
+		fmt.Println("买一个西瓜")
+	}
+```
+
+#### 7.1.2 if else
+
++ 当if 表达式结果为 true ，则执行 if 语句块内代码，否则执行 else 语句块内代码
+
+```go
+	fmt.Println("老公的想法：")
+	if yes == "Y" || yes == "y" {
+		fmt.Println("买一个包子")
+	} else {
+		fmt.Println("买十个包子")
+	}
+```
+
+#### 7.1.3 else if
+
++ 成绩评优: [90, 优秀 (A), [80, 90) => 良好 (B), [60, 80) => 及格 (C), [0, 60) =>不及格 (D) 
+
+```go
+	fmt.Println("请输入分数：")
+	var score int8
+	fmt.Scan(&score)
+	if score >= 90 {
+		fmt.Println("A")
+	} else if score >= 80 {
+		fmt.Println("B")
+	} else if score >= 60 {
+		fmt.Println("C")
+	} else {
+		fmt.Println("D")
+	}
+```
+
+## 7.4 选择语句switch
+
++ 对于选择语句可以有0 个或多个 case 语句， 最多有 1 个 default 语句 选择条件为 true的 case 语句 块 开始执行并退出，若所有条件为 false ，则执行 default 语句块 并退出 。可以通过 fallthrough 修改执行退出行为，继续执行下一条的 case 或 default 语句块
+
+#### 7.4.1 switch case 单值
+
+```go
+	fmt.Print("有没有买西瓜的（Y/N）：")
+	var yes string
+	fmt.Scan(&yes)
+
+	fmt.Println("老婆的想法：")
+	fmt.Println("买十个包子")
+
+	switch yes {
+	case "Y", "y":
+		fmt.Println("买一个西瓜")
+	}
+
+	fmt.Println("老公的想法")
+	switch yes {
+	case "Y", "y":
+		fmt.Println("买一个包子")
+	default:
+		fmt.Println("买十个包子")
+	}
+```
+
+#### 7.4.2 switch case 表达式
+
+```go
+	fmt.Print("请输入分数：")
+	var score int8
+	fmt.Scan(&score)
+	switch {
+	case score >= 90:
+		fmt.Println("A")
+	case score >= 80:
+		fmt.Println("B")
+	case score >=60 :
+		fmt.Println("D")
+	default:
+		fmt.Println("E")
+	}
+```
+
+#### 7.4.3 初始化子语句
+
+#### 7.4.4 fallthrough
+
++ switch cas e 默认执行 case 语句后退出，若 需要继续执行 下一个 case 语句块，可以在 case语句块中使用 fullthrough 进行声明
+
+```go
+	fmt.Print("请输入分数：")
+	var score int8
+	fmt.Scan(&score)
+	switch {
+	case score >= 90:
+		fmt.Println("A")
+	case score >= 80:
+		fmt.Println("B")
+	case score >=60 :
+		fmt.Println("D")
+		fallthrough
+	default:
+		fmt.Println("E")
+	}
+
+---
+运行结果： 
+请输入分数：61
+D
+E
+```
+
+### 7.5 for
+
+#### 7.5.1 for循环
+
+```go
+	num := 0
+	//初始化子语句; 条件子语句;后置子语句
+	for i := 1 ; i <= 100 ; i ++ {
+		num += i
+	}
+	fmt.Println(num)
+```
+
+#### 7.5.2 类while
+
+```go
+	num := 0
+	i := 1
+	for i <= 100 {
+		num += i
+		i ++
+	}
+	fmt.Println(num)
+```
+
+#### 7.5.3 无限循环
+
+```go
+	for {
+		i ++
+		fmt.Println(i)
+	}
+```
+
+#### 7.5.4 for range
+
++ 用于遍历 可迭代对象中的每个元素，例如字符串， 数组，切片 ，映射，通道 等
+
+```go
+	desc := "我爱中国"
+	for i, j := range desc {
+		fmt.Printf("%d %T %q\n", i, j, j )
+	}
+}
+
+---
+运行结果：
+0 int32 '我'
+3 int32 '爱'
+6 int32 '中'
+9 int32 '国'
+```
+
+#### 7.5.5 break和continue
+
++ break : 循环结束，终止循环
++ continue: 跳过本次循环，开始下次循环
+
+```go
+	fmt.Println("break")
+	for i := 0 ; i < 5 ; i++ {
+		if i == 3 {
+			break //循环结束，终止循环
+		} else {
+		fmt.Println(i)
+		}
+	}
+	fmt.Println("continue")
+	for i := 0 ; i < 5 ; i++ {
+		if i == 3 {
+			continue //跳过本次循环，开始下次循环
+		} else {
+			fmt.Println(i)
+		}
+	}
+	
+---
+运行结结果：
+break
+0
+1
+2
+continue
+0
+1
+2
+4
+```
+
+ 7.6 goto与lable
+
+```go
+	//goto替代for循环实现计算1到100的和
+	result := 0
+	i := 0
+START: //开始位置标签
+ 	if i > 100 {
+ 		goto FOREND //如果i > 100 打印最后结果
+	}
+	result += i
+	i ++
+	goto START
+	FOREND:
+		fmt.Println(result)
+```
+
++ break 和 continue 后也可以指定 label 用于指定跳出 或跳过 指定 label 同层 级的循环
+
+```go
+BREAKEND:
+	for i := 0; i < 3; i++ {
+		for j := 0; j < 3; j++{
+			if i * j == 4 {
+				break BREAKEND //跳到循环外
+			}
+			fmt.Println(i, j, i * j)
+		}
+	}
+
+---
+运行结果：
+0 0 0
+0 1 0
+0 2 0
+1 0 0
+1 1 1
+1 2 2
+2 0 0
+2 1 2
+```
 
 
 
