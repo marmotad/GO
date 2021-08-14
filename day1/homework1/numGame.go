@@ -12,8 +12,8 @@ func main() {
 	//定义一个变量用于存储猜测的数
 	start := true
 	//定义一个变量初始值为true,当退出程序时，将变量值修改为false
+	rand.Seed(time.Now().Unix())
 	for start {
-		rand.Seed(time.Now().Unix())
 		num := rand.Int() % 100
 		//生成一个随机数
 		fmt.Println(num)
@@ -47,7 +47,6 @@ func main() {
 				if yes == "y" || yes == "Y" {
 					break
 					//如果重来一次，退出本次循环，重新开始循环
-					continue
 				} else {
 					start = false
 					//如果输入的不是y或Y,认为结束游戏，修改for循环条件为false，退出最外层循环

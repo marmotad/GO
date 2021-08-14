@@ -909,7 +909,7 @@ continue
 4
 ```
 
- 7.6 goto与lable
+###  7.6 goto与lable
 
 ```go
 	//goto替代for循环实现计算1到100的和
@@ -951,11 +951,666 @@ BREAKEND:
 2 1 2
 ```
 
+## 8 数组
+
++  数组是具有相同数据类型的数据项组成的一组长度固定的序列（数组是有序的），数据项叫做数组的元素；
++ 数组的长度必须是非负整数的常量，长度也是类型的一部分
+
+### 8.1 声明数组
+
++ 数组声明需要指定组成元素的类型以及存储元素的数量（长度）。在数组声明后，其长度不可修改，数组的每个元素会根据对应类型的零值对进行 
+
+#### 8.1.1 声明数组
+
+```go
+ 	var nums [10]int
+	var bools [3]bool
+	//声明数组，数组的零值是对应数据类型的零值
+
+	fmt.Printf("%T\n ", nums)
+	fmt.Println(nums)
+	fmt.Println(bools)
+
+---
+运行结果：
+[10]int
+ [0 0 0 0 0 0 0 0 0 0]
+[false false false]
+```
+
+#### 8.1.2  数组的简短声明
+
+```go
+	//声明指定长度数组
+	nums1 := [3]int{1, 2, 3}
+	fmt.Println(nums1)
+	//声明指定长度数组，使用索引赋值
+	nums2 := [3]int{0: 11, 2: 20}
+	fmt.Println(nums2)
+	//使用推导方式声明数组
+	nums3 := [...]int{10, 20, 30}
+	fmt.Println(nums3)
+	//使用推导方式声明数组,并使用索引赋值
+	nums4 := [...]int{0: 10, 2: 20}
+	fmt.Println(nums4)
+
+---
+运行结果：
+[1 2 3]
+[11 0 20]
+[10 20 30]
+[10 0 20]
+```
+
+### 8.2 数组的字面量
+
+```go
+	//字面量赋值
+	//指定数组长度赋值
+	nums = [10]int{1, 2, 3}
+	fmt.Println(nums)
+	//对指定位置元素进行初始化
+	nums = [10]int{0:10, 1:20, 9:10}
+	fmt.Println(nums)
+	//使用初始化元素数量推到数组长度
+	nums = [...]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	fmt.Println(nums)
+
+---
+运行结果：
+[1 2 3 0 0 0 0 0 0 0]
+[10 20 0 0 0 0 0 0 0 10]
+[1 2 3 4 5 6 7 8 9 10]
+```
+
+### 8.3 数组的操作
+
+#### 8.3.1 关系运算
+
++ 运算符：==、!=
++ 数组的关系运算必须数组长度相等，否则无法操作
+
+```go
+	nums5 := [3]int{1, 2, 3}
+	nums6 := [3]int{1, 2, 4}
+	fmt.Println(nums5 == nums6)
+	fmt.Println(nums5 != nums6)
+
+---
+运行结果：
+false
+true
+```
+
+#### 8.3.2 获取数组长度
+
+```go
+	fmt.Println(len(nums5))
+
+---
+运行结果：
+3
+```
+
+#### 8.3.3 遍历数组
+
+```go
+	//普通for遍历
+	for i := 0; i < len(nums); i ++ {
+		fmt.Println(nums[i])
+	}
+	//for range遍历
+	for _, value := range nums {
+		fmt.Println(value  )
+	}
+
+```
+
+#### 8.3.4 数组的切片
+
+```go
+	//数组的切片
+	//array[start:end]
+	fmt.Printf("%T\n", nums[1:3]) //数组的切片是切片类型
+	fmt.Printf("%v\n", nums[1:3]) //打印切片数组
+
+	//array[start:end:cap](end<=cap<=len)获取数组的一部分元素做为切片
+	fmt.Printf("%T\n", nums[0:3:3])
+	fmt.Printf("%v\n", nums[0:3:4])
+---
+运行结果：
+[]int
+[2 3]
+```
+
+#### 8.3.5 多维数组
+
+ ```go
+ 	//多维数组
+ 	var marrays [3][3]int
+ 	fmt.Println(marrays)
+ 	//多维数组赋值
+ 	marrays[1] = [3]int{1, 2, 3}
+ 	fmt.Println(marrays)
+ 	marrays[0][1] = 10
+ 	fmt.Println(marrays)
+ 
+ ---
+ 运行结果：
+ []int
+ [1 2 3]
+ [[0 0 0] [0 0 0] [0 0 0]]
+ ```
+
+### 8.4 切片
+
++ 切片声明需要指定组成元素的类型，但不需要指定存储元素的数量（长度）。在切片声明后，会被初始化为nil，表示暂不存在的切片
++ 切片是长度可变的数组（具有相同数据类型的数据项组成的一组长度可变的序列），切片由三部分组成：
+  + 指针：指向切片第一个元素指向的数组元素的地址
+  + 长度：切片元素的数量
+  + 容量：切片开始到结束位置元素的数量
+
+#### 8.4.1 定义切片
+
+```go
+	var slice []int //定义切片
+	fmt.Printf("%T %v\n", slice, slice)
+	fmt.Println(slice == nil)
+	//在切片声明后，会被初始化为nil，表示暂不存在的切片 
+```
+
+##### 8.4.2.1 切片赋值
+
+```go
+	var slice []int //定义切片
+	//切片字面量赋值
+	slice = []int{1, 2, 3}
+	fmt.Printf("%#v\n", slice)
+```
+
+##### 8.4.2.2 字面量赋值
+
+```go
+	var slice []int //定义切片
+	//数组切片赋值
+	arr := [3]int{1, 2, 3}
+	fmt.Printf("%#v\n", arr)
+	slice = arr[0:1]
+	fmt.Printf("%#v\n", slice)
+```
+
+#### 8.4.3 切片的长度与容量
+
++ 切片的长度就是它所包含的元素个数。
+
++ 切片的容量是从它的第一个元素开始数，到其底层数组元素末尾的个数。
+
+```go
+	//make 函数
+	slice = make([]int, 3)
+	// make函数创建切片，此时需要传入一个参数来指定切片的长度,若只指定长度，则长度和容量默认相等
+	fmt.Printf("%#v %d %d\n", slice, len(slice), cap(slice))
+	slice = make([]int, 3, 5)
+	//分别指定长度和容量，容量要大于等于长度
+	fmt.Printf("%#v %d %d\n", slice, len(slice), cap(slice))
+
+---
+运行结果：
+[]int{0, 0, 0} 3 3
+[]int{0, 0, 0} 3 5
+```
+
+#### 8.4.4 切片的操作（CRUD）
+
+##### 8.4.4.1 查询
+
+```go
+//查询
+	fmt.Println(slice[1])
+	//遍历切片
+	for _, j := range slice {
+		fmt.Println(j)
+	}
+
+---
+运行结果：
+0
+0
+0
+0
+```
+
+##### 8.4.4.2 修改
+
+```go
+	//修改
+	slice[1] = 10
+	fmt.Println(slice[1])
+
+---
+运行结果：
+10
+```
+
+##### 8.4.4.3 添加
+
+```go
+	//增加
+	slice = append(slice, 11)
+	fmt.Printf("%#v %d %d\n", slice, len(slice), cap(slice))
+
+---
+运行结果：
+[]int{0, 10, 0, 11} 4 5
+
+```
+
+##### 8.4.4.4 删除
+
++ go中的切片需要使用copy进行删除
+  + 当大的切片copy到小的切片时，只copy和小的切片容量相同的部分
+
+```go
+	//copy
+	nums01 := []int{1, 2, 3, 4}
+	nums02 := []int{10, 20, 30, 40, 50}
+	//将nums01 copy 到 nums02
+	copy(nums02, nums01)
+	fmt.Println(nums01, nums02)
+
+	//将nums02 copy 到 nums01
+	nums02 = []int{10, 20, 30, 40, 50}
+	copy(nums01, nums02)
+	//由于nums02比numbs01大，所以只copy nums02到nums01时只copy前面的元素
+	fmt.Println(nums01, nums02)
+
+---
+运行结果：
+[10 20 30 40] [10 20 30 40 50]
+```
+
++ 删除切片中间的元素
+
+```go
+	//删除中间的元素
+	fmt.Println(nums02)
+	copy(nums02[2:], nums02[3:])
+	//将要删除的元素用后面的元素覆盖
+	fmt.Println(nums02)
+	nums02 = nums02[0:len(nums02) -1]
+	//删除最后一位元素（因为中间的元素已被覆盖，后面的元素为重复的）
+	fmt.Println(nums02)
+
+---
+运行结果：
+[10 20 30 40 50]
+[10 20 40 50 50]
+[10 20 40 50]
+```
+
+### 8.5 切片操作
+
+```go
+	//切片操作
+	fmt.Printf("%T %v\n", slice[0:2], slice[0:2])
+	fmt.Printf("%T %v\n", slice[0:2:4], slice[0:2:4])
+	//当指定切片容量时，新切片容量为new_cap - start
+	nums := slice[1:3:4]
+	fmt.Printf("%#v %d %d %d\n", nums, nums, len(nums), cap(nums))
+	//当未指定切片容量时，新切片容量为old _cap - start
+	nums = slice[1:3]
+	fmt.Printf("%#v %d %d %d\n", nums, nums, len(nums), cap(nums))
+
+---
+运行结果：
+[]int [0 0]
+[]int [0 0]
+[]int{0, 0} [0 0] 2 3
+[]int{0, 0} [0 0] 2 4
+```
+
+###  8.6 队列和堆栈
+
+```go
+	//队列和堆栈
+	//队列：先进先出
+	queue := []int{1, 2, 3, 4}
+	queue = queue[1:]
+	fmt.Println(queue)
+	queue = queue[1:]
+	fmt.Println(queue)
+	//堆栈：先进后出
+	stack := []int{1, 2, 3, 4}
+	stack = stack[0:len(stack) -1]
+	fmt.Println(stack)
+	stack = stack[0:len(stack) -1]
+	fmt.Println(stack)
+
+---
+运行结果：
+[2 3 4]
+[3 4]
+[1 2 3]
+[1 2]
+```
+
+### 8.7 切片排序（sort包 ）
+
+#### 8.7.1 使用sort包对切片类型排序
 
 
 
+```go
+	nums := []int{1, 10, 30, 5}
+	sort.Ints(nums)
+	//对int类型切片排序
+	fmt.Println(nums)
 
+	names := []string{"aa", "DD", "b"}
+	sort.Strings(names)
+	//对字符串排序
+	fmt.Println(names)
 
+	heights := []float64{1.2, 6.7, 7, 5.4}
+	sort.Float64s(heights)
+	//对float64类型排序
+	fmt.Println(heights)
+```
 
+## 9 映射
 
++  映射是无序的
+
++ 映射是存储一系列无序的key/value对，通过key来对value进行操作（增、删、改、查）。
+
+### 9.1 声明映射
+
++ map声明需要指定组成元素key和value的类型，在声明后，会被初始化为nil，表示暂不存在的映射
+
+```go
+	var scores map[string]int //nil映射
+
+	fmt.Printf("%T %#v\n", scores, scores)
+
+	fmt.Println(scores == nil)
+```
+
+#### 9.2 初始化映射
+
+##### 9.2.1 通过字面量初始化
+
+```go
+	//通过字面量初始化
+	scores = map[string]int{"A":1, "B":2}
+	fmt.Println(scores)
+
+---
+运行结果：
+map[A:1 B:2]
+```
+
+##### 9.2.2 通过make函数初始化空映射
+
+```go
+	//初始化一个空的映射
+	scores = make(map[string]int)
+	fmt.Println(scores)
+---
+运行结果：
+map[]
+```
+
+#### 9.3 映射的操作（CRUD）
+
+##### 9.3.1 查询
+
+```go
+	//映射的操作
+	// 通过key查询
+	scores = map[string]int{"A":1, "B":2}
+	fmt.Println(scores["A"])
+	//访问不存在的key时，会返回对应value的零值，int零值是0，所以通过key访问不准确
+	fmt.Println(scores["C"])
+	//通过两个变量查询key是否存在
+	v, yes := scores["A"]
+	fmt.Println(yes)
+	if yes {
+		fmt.Println(v)
+	}
+	if v, ok := scores["C"]; ok {
+		//通过if初始化子语句判断
+		fmt.Println(v)
+	}
+
+---
+运行结果：
+1
+0
+true
+1  
+```
+
+#### 9.3.2 修改和添加
+
++ 当key存在时，为修改，不存在时为添加
+
+```go
+	//修改和添加
+	//当key存在时，为修改，不存在时为添加
+	scores["A"] = 8
+	fmt.Println(scores["A"])
+	scores["C"] = 1
+	fmt.Println(scores["C"])
+
+---
+运行结果：
+8
+1
+```
+
+#### 9.3.3. 删除
+
+```go
+	//删除
+	delete(scores, "A")
+	fmt.Println("A")
+	scores["a"] = 8
+	fmt.Println(scores)
+
+---
+运行结果：
+A
+map[B:2 C:1 a:8] 
+```
+
+### 9.4 获取映射元素数
+
+```go
+	//获取当前映射的元素数
+	fmt.Println(len(scores))
+---
+运行结果：
+3
+```
+
+### 9.5 遍历映射
+
+```go
+	//遍历映射(映射是无序的)
+	for k, v := range scores {
+		fmt.Println(k, ":", v)
+	}
+
+---
+运行结果：
+B : 2
+C : 1
+a : 8
+```
+
+### 9.6 映射的使用
+
+#### 9.6.1 统计数组中相同元素个数
+
+```go
+package main
+
+import "fmt"
+
+func main()  {
+	//投票计数
+	users := []string{"a", "b" , "a"}
+	//方法一
+	//投票序列
+	votes := map[string]int{}
+	//使用映射统计票数
+	for _,	v := range users{
+		//遍历数组中成员
+		if _, ok := votes[v]; ok {
+			//如果当前数组成员在映射中存在，映射的value值加一
+			votes[v] = votes[v] + 1
+		} else {
+			//如果当前数组成员在映射中不存在，在映射中添加该成员并赋值为1
+			votes[v] = 1
+		}
+	}
+	fmt.Println(votes)
+
+	//方法二
+	votes = map[string]int{}
+	//使用映射统计票数
+	for _,	v := range users{
+		//遍历数组中成员
+			votes[v] ++
+			//对遍历到的key对应的value值加1（由于映射遍历到的不存在的key值时，默认value值为0）
+		}
+	fmt.Println(votes)
+}
+```
+
+#### 9.6.2 统计映射中字符串数
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	strs := `
+I HAVE A DREAM
+Martin Luther King, Jr.
+I am happy to join with you today in what will go down in history as the greatest demonstration for freedom in the
+history of our nation.
+Five score years ago, a great American, in whose symbolic shadow we stand today, signed the Emancipation
+Proclamation. This momentous decree came as a great beacon light of hope to millions of Negro slaves who had been
+seared in the flames of withering injustice. It came as a joyous daybreak to end the long night of their captivity.
+But one hundred years later, the Negro still is not free. One hundred years later, the life of the Negro is still sadly
+crippled by the manacles of segregation and the chains of discrimination. One hundred years later, the Negro lives on a
+lonely island of poverty in the midst of a vast ocean of material prosperity. One hundred years later, the Negro is still
+languished in the corners of American society and finds himself an exile in his own land. And so we've come here today
+to dramatize a shameful condition.
+In a sense we've come to our nation's capital to cash a check. When the architects of our republic wrote the magnificent
+words of the Constitution and the Declaration of Independence, they were signing a promissory note to which every
+American was to fall heir. This note was a promise that all men, yes, black men as well as white men, would be
+guaranteed the "unalienable Rights" of "Life, Liberty and the pursuit of Happiness." It is obvious today that America has
+defaulted on this promissory note, insofar as her citizens of color are concerned. Instead of honoring this sacred
+obligation, America has given the Negro people a bad check, a check which has come back marked "insufficient funds."
+But we refuse to believe that the bank of justice is bankrupt. We refuse to believe that there are insufficient funds in the
+great vaults of opportunity of this nation. And so, we've come to cash this check, a check that will give us upon demand
+the riches of freedom and the security of justice.
+We have also come to this hallowed spot to remind America of the fierce urgency of Now. This is no time to engage in
+the luxury of cooling off or to take the tranquilizing drug of gradualism. Now is the time to make real the promises of
+democracy. Now is the time to rise from the dark and desolate valley of segregation to the sunlit path of racial justice.
+Now is the time to lift our nation from the quicksands of racial injustice to the solid rock of brotherhood. Now is the time
+to make justice a reality for all of God's children.
+It would be fatal for the nation to overlook the urgency of the moment. This sweltering summer of the Negro's
+legitimate discontent will not pass until there is an invigorating autumn of freedom and equality. Nineteen sixty‐three is
+not an end, but a beginning. And those who hope that the Negro needed to blow off steam and will now be content will
+have a rude awakening if the nation returns to business as usual. And there will be neither rest nor tranquility in America
+until the Negro is granted his citizenship rights. The whirlwinds of revolt will continue to shake the foundations of our
+nation until the bright day of justice emerges.
+But there is something that I must say to my people, who stand on the warm threshold which leads into the palace of
+justice: In the process of gaining our rightful place, we must not be guilty of wrongful deeds. Let us not seek to satisfy
+our thirst for freedom by drinking from the cup of bitterness and hatred. We must forever conduct our struggle on the
+high plane of dignity and discipline. We must not allow our creative protest to degenerate into physical violence. Again
+and again, we must rise to the majestic heights of meeting physical force with soul force.
+The marvelous new militancy which has engulfed the Negro community must not lead us to a distrust of all white
+people, for many of our white brothers, as evidenced by their presence here today, have come to realize that their
+destiny is tied up with our destiny. And they have come to realize that their freedom is inextricably bound to our
+freedom.
+We cannot walk alone.
+And as we walk, we must make the pledge that we shall always march ahead.
+We cannot turn back.
+There are those who are asking the devotees of civil rights, "When will you be satisfied?" We can never be satisfied as
+long as the Negro is the victim of the unspeakable horrors of police brutality. We can never be satisfied as long as our
+bodies, heavy with the fatigue of travel, cannot gain lodging in the motels of the highways and the hotels of the cities.
+We cannot be satisfied as long as the negro's basic mobility is from a smaller ghetto to a larger one. We can never be
+satisfied as long as our children are stripped of their self‐hood and robbed of their dignity by signs stating: "For Whites
+Only." We cannot be satisfied as long as a Negro in Mississippi cannot vote and a Negro in New York believes he has
+nothing for which to vote. No, no, we are not satisfied, and we will not be satisfied until "justice rolls down like waters,
+and righteousness like a mighty stream."¹
+I am not unmindful that some of you have come here out of great trials and tribulations. Some of you have come fresh
+from narrow jail cells. And some of you have come from areas where your quest ‐‐ quest for freedom left you battered
+by the storms of persecution and staggered by the winds of police brutality. You have been the veterans of creative
+suffering. Continue to work with the faith that unearned suffering is redemptive. Go back to Mississippi, go back to
+Alabama, go back to South Carolina, go back to Georgia, go back to Louisiana, go back to the slums and ghettos of our
+northern cities, knowing that somehow this situation can and will be changed.
+Let us not wallow in the valley of despair, I say to you today, my friends.
+And so even though we face the difficulties of today and tomorrow, I still have a dream. It is a dream deeply rooted in
+the American dream.
+I have a dream that one day this nation will rise up and live out the true meaning of its creed: "We hold these truths to
+be self‐evident, that all men are created equal."
+I have a dream that one day on the red hills of Georgia, the sons of former slaves and the sons of former slave owners
+will be able to sit down together at the table of brotherhood.
+I have a dream that one day even the state of Mississippi, a state sweltering with the heat of injustice, sweltering with
+the heat of oppression, will be transformed into an oasis of freedom and justice.
+I have a dream that my four little children will one day live in a nation where they will not be judged by the color of their
+skin but by the content of their character.
+I have a dream today!
+I have a dream that one day, down in Alabama, with its vicious racists, with its governor having his lips dripping with the
+words of "interposition" and "nullification" ‐‐ one day right there in Alabama little black boys and black girls will be able
+to join hands with little white boys and white girls as sisters and brothers.
+I have a dream today!
+I have a dream that one day every valley shall be exalted, and every hill and mountain shall be made low, the rough
+places will be made plain, and the crooked places will be made straight; "and the glory of the Lord shall be revealed and
+all flesh shall see it together."2
+This is our hope, and this is the faith that I go back to the South with.
+With this faith, we will be able to hew out of the mountain of despair a stone of hope. With this faith, we will be able to
+transform the jangling discords of our nation into a beautiful symphony of brotherhood. With this faith, we will be able
+to work together, to pray together, to struggle together, to go to jail together, to stand up for freedom together,
+knowing that we will be free one day.
+And this will be the day ‐‐ this will be the day when all of God's children will be able to sing with new meaning:
+My country 'tis of thee, sweet land of liberty, of thee I sing.
+Land where my fathers died, land of the Pilgrim's pride,
+From every mountainside, let freedom ring!
+And if America is to be a great nation, this must become true.
+And so let freedom ring from the prodigious hilltops of New Hampshire.
+Let freedom ring from the mighty mountains of New York.
+Let freedom ring from the heightening Alleghenies of Pennsylvania.
+Let freedom ring from the snow‐capped Rockies of Colorado.
+Let freedom ring from the curvaceous slopes of California.
+But not only that:
+Let freedom ring from Stone Mountain of Georgia.
+Let freedom ring from Lookout Mountain of Tennessee.
+Let freedom ring from every hill and molehill of Mississippi.
+From every mountainside, let freedom ring.
+And when this happens, when we allow freedom ring, when we let it ring from every village and every hamlet, from
+every state and every city, we will be able to speed up that day when all of God's children, black men and white men,
+Jews and Gentiles, Protestants and Catholics, will be able to join hands and sing in the words of the old Negro spiritual:
+Free at last! Free at last!
+Thank God Almighty, we are free at last!3
+`
+	letter := map[rune]int{}
+	for _, ch := range strs {
+		if ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z' {
+			letter[ch]++
+		}
+	}
+	for ch, cnt := range letter {
+		fmt.Printf("%c:%d\n", ch, cnt)
+	}
+}
+```
 
